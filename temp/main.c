@@ -10,7 +10,7 @@ int main(void)
 {
 	char **argv, *delim = " ";
 	char *var_name = "PATH", *msg = ":) ";
-	int status, no_args, n = 0;
+	int status, no_args, n = 0, from_pipe = 0, r;
 	pid_t pid;
 
 	while (1)
@@ -20,14 +20,13 @@ int main(void)
 
 		argv = get_commands(&n, &no_args, delim);
 		if (n == 99)
-			break;
+			exit(0);
 		if (n == 1)
 			continue;
 
 		argv[0] = check_env(argv[0], var_name);
 		if (argv[0] == NULL)
 		{
-			free_grid(argv, no_args);
 			perror("./shellhere");
 			continue;
 		}
@@ -43,6 +42,5 @@ int main(void)
 			free_grid(argv, no_args);
 		}
 	}
-	free_grid(argv, no_args);
 	return (0);
 }

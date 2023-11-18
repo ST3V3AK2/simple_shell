@@ -9,13 +9,14 @@
 
 void execute(char **argv)
 {
-	char *env_v = "env_v";
-	int n;
+	char *env_v = "env";
+	int n, r;
 
 	if (argv == NULL || argv[0] == NULL)
 		return;
 
-	if (argv[0] == env_v)
+	r = _strdcmp(argv[0], env_v, '\0');
+	if (r == 1)
 	{
 		print_envir();
 		return;
@@ -23,8 +24,8 @@ void execute(char **argv)
 	n = execve(argv[0], argv, environ);
 	if (n == 1)
 	{
-		perror("./shellhere");
-		exit(100);
+		perror(argv[0]);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -60,7 +61,7 @@ char *get_env_var(char *str)
  * @str: name of executable
  * @var_name: name of enviromental variable
  *
- * Return: on success, absolute path for executable
+ * Return: on success, absolute path of str
  * on error, NULL
  */
 
@@ -89,10 +90,11 @@ char *check_env(char *str, char *var_name)
 		path[j] = _strcat(path[j], str);
 		if (path[j] == NULL)
 			return (NULL);
+
 		if (stat(path[j], &st) == 0)
 			return (path[j]);
 	}
-	return (NULL);
+	return (str);
 }
 
 /**
@@ -107,4 +109,5 @@ void print_envir(void)
 
 	for (i = 0; environ[i] != NULL; i++)
 		_puts(environ[i]);
+	_putchar('\n');
 }

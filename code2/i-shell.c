@@ -22,52 +22,53 @@ void i_shell(void)
 		exit(0);
 	}
 
+	/*
 	while (n > 0)
 	{
 		n = getline(&temp_buf, &size, stdin);
-		buffer = _strcat(buffer, temp_buf);
-	}
 
-	argv1 = getargs(buffer, delim, no_args);
-	if (argv1 == NULL)
-	{
-		free(buffer);
-		exit(0);
-	}
-
-	r = _strdcmp(argv1[0], q, '\0');
-	if (r == 1)
-		exit(0);
-
-	for (i = 0; i < no_args; i++)
-	{
-		a = countarg(argv1[i], " ");
-		printf("argv1: %s\n", argv1[i]);
-		if (a < 1)
-			break;
-
-		temp = getargs(argv1[i], d, a);
-		if (temp == NULL)
-			continue;
-
-		temp[0] = check_env(temp[0], var_name);
-		if (temp[0] == NULL)
+		argv1 = getargs(buffer, delim, no_args);
+		if (argv1 == NULL)
 		{
-			perror("./shell");
-			continue;
-		}
-		pid = fork();
-		if (pid == 0)
-		{
-			execute(temp);
+			free(buffer);
 			exit(0);
-			sleep(3);
 		}
-		else
+
+		r = _strdcmp(argv1[0], q, '\0');
+		if (r == 1)
+			exit(0);
+
+		for (i = 0; i < no_args; i++)
 		{
-			wait(&status);
-			free_grid(argv1, no_args);
+			a = countarg(argv1[i], " ");
+			printf("argv1: %s\n", argv1[i]);
+			if (a < 1)
+				break;
+
+			temp = getargs(argv1[i], d, a);
+			if (temp == NULL)
+				continue;
+
+			temp[0] = check_env(temp[0], var_name);
+			if (temp[0] == NULL)
+			{
+				perror("./shell");
+				continue;
+			}
+			pid = fork();
+			if (pid == 0)
+			{
+				execute(temp);
+				exit(0);
+				sleep(3);
+			}
+			else
+			{
+				wait(&status);
+				free_grid(argv1, no_args);
+			}
 		}
 	}
+	*/
 	exit(0);
 }

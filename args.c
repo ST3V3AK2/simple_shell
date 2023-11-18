@@ -15,7 +15,9 @@ int countarg(char *str, char *delim)
 
 	for (i = 0; str[i] != '\0'; i++)
 	{
-		if (str[i] == *delim)
+		if (str[0] == *delim)
+			continue;
+		if (str[i] == *delim && str[i - 1] != *delim)
 			j++;
 	}
 	return (++j);
@@ -34,6 +36,12 @@ char *remove_newline(char *str)
 
 	for (i = 0; str[i] != '\0'; i++)
 	{
+		if (str[i] == '\n')
+			str[i] = '\0';
+
+		if (str[i] == '\n' && str[i + 1] == '\n')
+			str[i] = '\0';
+
 		if (str[i] == '\n' && str[i + 1] == '\0')
 			str[i] = '\0';
 	}
@@ -88,24 +96,26 @@ char **getargs(char *str, char *delim, int n)
  * get_commands - gets input commands from stdin
  * @n: store the type of output
  * @no_args: stroes the number of arguments in the 2-D array
+ * @delim: the delimeter character
  *
  * Return: on success, 2-D grid of inpt commands
  * on error, NULL
  */
 
-char **get_commands(int *n, int *no_args)
+char **get_commands(int *n, int *no_args, char *delim)
 {
 	char **argv, *quit = "exit";
-	char *buffer = NULL, *delim = " ";
+	char *buffer = NULL;
 	ssize_t r;
 	size_t size = 0;
 
 	r = getline(&buffer, &size, stdin);
-	if (r < 0)
+	if (r == EOF)
 	{
+		*n = 99;
 		_puts("\n");
 		free(buffer);
-		exit(0);
+		return (NULL);
 	}
 
 	if (buffer[0] == '\n')
@@ -120,17 +130,18 @@ char **get_commands(int *n, int *no_args)
 		free(buffer);
 		return (NULL);
 	}
-
 	argv = getargs(buffer, delim, *no_args);
 	if (argv == NULL)
 	{
 		free(buffer);
 		return (NULL);
 	}
-
 	r = _strdcmp(argv[0], quit, '\0');
 	if (r == 1)
+	{
+		free(buffer);
 		*n = 99;
+	}
 
 	return (argv);
 }

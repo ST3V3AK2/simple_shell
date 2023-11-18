@@ -26,7 +26,7 @@ int _strdcmp(char *str1, char *str2, char delim);
 int countarg(char *str, char *delim);
 char *remove_newline(char *str);
 char **getargs(char *str, char *delim, int n);
-char **get_commands(int *n, int *no_args);
+char **get_commands(int *n, int *no_args, char *delim);
 
 /* execute.c */
 void print_envir(void);
@@ -38,5 +38,5 @@ void execute(char **argv);
 void free_grid(char **grid, int height);
 
 /* i-shell.c */
-/* void i_shell(void); */
+void i_shell(void);
 #endif
