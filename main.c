@@ -10,17 +10,24 @@ int main(void)
 {
 	char **argv, *delim = " ";
 	char *var_name = "PATH", *msg = ":) ";
-	int status, no_args, n = 0;
+	int status, no_args, n = 0, from_pipe = 0;
 	pid_t pid;
 
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) != 0)
+		{
+			from_pipe = 1;
 			_puts(msg);
+		}
 
 		argv = get_commands(&n, &no_args, delim);
 		if (n == 99)
+		{
+			if (from_pipe)
+				_puts("\n");
 			break;
+		}
 		if (n == 1)
 			continue;
 
@@ -28,7 +35,7 @@ int main(void)
 		if (argv[0] == NULL)
 		{
 			free_grid(argv, no_args);
-			perror("./shellhere");
+			perror("./shell");
 			continue;
 		}
 		pid = fork();

@@ -113,7 +113,6 @@ char **get_commands(int *n, int *no_args, char *delim)
 	if (r == EOF)
 	{
 		*n = 99;
-		_puts("\n");
 		free(buffer);
 		return (NULL);
 	}
